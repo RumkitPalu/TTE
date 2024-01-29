@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Tanda Tangan Elektronik</title>
+</head>
+
+<body>
+
+    <h1>Sistem Tanda Tangan Elektronik</h1>
+
+    <!-- Container untuk menampilkan tanda tangan -->
+    <div id="signatureContainer">
+        <canvas id="signatureCanvas" width="500" height="200" style="border: 1px solid #000;"></canvas>
+    </div>
+
+    <!-- Tombol untuk menyimpan tanda tangan -->
+    <button onclick="saveSignature()">Simpan Tanda Tangan</button>
+
+    <!-- Skrip JavaScript untuk mengelola tanda tangan -->
+    <script>
+        // Mendapatkan elemen canvas dan konteksnya
+        var canvas = document.getElementById('signatureCanvas');
+        var ctx = canvas.getContext('2d');
+
+        // Variabel untuk menyimpan status tanda tangan
+        var isDrawing = false;
+
+        // Fungsi untuk memulai tanda tangan
+        function startDrawing(e) {
+            isDrawing = true;
+            draw(e);
+        }
+
+        // Fungsi untuk menggambar tanda tangan
+        function draw(e) {
+            if (!isDrawing) return;
+
+            // Menggambar garis
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#000';
+
+            // Menghitung posisi pointer
+            var rect = canvas.getBoundingClientRect();
+            var x = e.clientX - rect.left;
+            var y = e.clientY - rect.top;
+
+            // Memulai atau melanjutkan garis
+            if (isDrawing) {
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            } else {
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+            }
+        }
+
+        // Fungsi untuk mengakhiri tanda tangan
+        function endDrawing() {
+            isDrawing = false;
+        }
+
+        // Fungsi untuk menyimpan tanda tangan (Anda perlu mengganti ini dengan logika API BSRE)
+        function saveSignature() {
+            var signatureDataURL = canvas.toDataURL(); // Mendapatkan data URL tanda tangan
+
+            // Mengirimkan data tanda tangan ke API BSRE (Anda perlu mengganti ini dengan implementasi sesuai API BSRE)
+            // Contoh:
+            // fetch('https://api.bsre-tanda-tangan.com', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify({ signature: signatureDataURL }),
+            // })
+            // .then(response => response.json())
+            // .then(data => console.log(data))
+            // .catch(error => console.error('Error:', error));
+        }
+
+        // Menambahkan event listener untuk mengelola tanda tangan
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', endDrawing);
+        canvas.addEventListener('mouseout', endDrawing);
+    </script>
+
+</body>
+
+</html>
